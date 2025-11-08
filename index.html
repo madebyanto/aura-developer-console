@@ -160,17 +160,18 @@ auth.onAuthStateChanged(async (user)=>{
     if(user && user.emailVerified){
         try{
             const doc = await db.collection("users").doc(user.uid).get();
-            if(doc.exists){
-                const userData = doc.data();
-                if(userData.developer){
-                    window.location.href = "dashboard.html";
-                } else {
-                    devAvatar.src = user.photoURL || "auraaccount.png";
-                    popupDev.style.display="flex";
-                    btnYes.onclick = ()=> { window.location.href="set_developer_profile.html"; }
-                    btnNo.onclick = ()=> { popupDev.style.display="none"; }
-                }
-            }
+if(doc.exists){
+    const userData = doc.data();
+    if(userData.developer){
+        window.location.href = "dashboard.html";
+    } else {
+        // Usa l'URL di profileImage dal documento Firestore
+        devAvatar.src = userData.profileImage || "auraaccount.png";
+        popupDev.style.display = "flex";
+        btnYes.onclick = () => { window.location.href = "set_developer_profile.html"; }
+        btnNo.onclick = () => { popupDev.style.display = "none"; }
+    }
+}
         } catch(err){ console.error(err); }
     }
 });
